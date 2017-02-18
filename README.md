@@ -12,7 +12,7 @@
 ```javascript
 let boiler-lib = require("boiler");
 
-let boiler = boiler-lib.pullBoiler("push");
+let boiler = boiler-lib.takeBoiler("push");
 let fs = require("fs");
 
 function writeFile(dx) {
@@ -20,17 +20,17 @@ function writeFile(dx) {
   return boiler-lib.util.fn2fn.nextSteam(dx);
 }
 
-boiler.push(boiler-lib.asSteam(writeFile), new boiler-lib.SteamMixer({
+boiler.push(boiler.asSteam(writeFile), new boiler-lib.SteamMixer({
   set decode(x) {
     return [x.name, x.contents];
   }
   get decode() {
-    return boiler-lib.pipes.int.RedirectPipe("{set}decode", takenData=boiler-lib.vars.context.map.steam.previous());
+    return boiler-lib.pipes.int.RedirectPipe("{set}decode", takenData=boiler.vars.context.map.steam.previous());
   }
   steam: function(dx) {
-    return boiler-lib.vars.context.current.steam(boiler-lib.util.fn2fn.resign(dx));
+    return boiler.vars.context.current.steam(boiler-lib.util.fn2fn.resign(dx));
   }
-}, boiler-lib.util.getSignature(boiler-lib.staticSteam(writeFile)));
+}, boiler-lib.util.getSignature(boiler.staticSteam(writeFile)));
 ```
 
 Whoah! Lots of checking there! I'll explain below.
